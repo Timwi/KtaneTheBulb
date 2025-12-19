@@ -78,6 +78,7 @@ public class TheBulbModule : MonoBehaviour
     private bool _mustUndoBulbScrewing;
     private bool _pressedOAtStep1;
     private bool _goOnAtScrewIn;
+    private bool _delayTurnOnUntilScrewCompletes;
     private bool _wasOnAtUnscrew;
     private int _stage;
     private string _correctButtonPresses;
@@ -598,6 +599,12 @@ public class TheBulbModule : MonoBehaviour
 
     private void TurnLights(bool on)
     {
+        if (_isScrewing && !_isBulbUnscrewed)
+        {
+            _delayTurnOnUntilScrewCompletes = on;
+            return;
+        }
+
         Light1.enabled = on;
         Light2.enabled = on;
         _isOn = on;
@@ -633,8 +640,11 @@ public class TheBulbModule : MonoBehaviour
         if (_isSolved)
             yield break;
 
-        if (@in && (_wasOnAtUnscrew || _goOnAtScrewIn))
+        if (@in && (_wasOnAtUnscrew || _goOnAtScrewIn || _delayTurnOnUntilScrewCompletes))
+        {
             TurnLights(on: true);
+            _delayTurnOnUntilScrewCompletes = false;
+        }
 
         if (_stage == 0)
         {
