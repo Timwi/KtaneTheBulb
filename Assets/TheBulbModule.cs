@@ -526,7 +526,7 @@ public class TheBulbModule : MonoBehaviour
                                 : (_isBulbUnscrewed ? strike : (o ? 13 : strike)),
 
                         // Note that _isBulbUnscrewed here has the NEW value because this is evaluated AFTER the boolean is flipped
-                        BulbScrew = () => _isBulbUnscrewed ? strike : curStep
+                        BulbScrew = () => _isBulbUnscrewed || (_bulbColor != col[4] && _bulbColor != col[5]) ? strike : curStep
                     };
                 }
             }
